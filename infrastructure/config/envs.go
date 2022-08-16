@@ -11,6 +11,9 @@ type environment struct {
 	DBName     string `env:"DB_NAME"`
 	DBUser     string `env:"DB_USER"`
 	DBPassword string `env:"DB_PASSWORD"`
+	KeyCrypto  string `env:"KEY_CRYPTO"`
+	KeyGcmIV   string `env:"KEY_GCM_IV"`
+	KeyAead    string `env:"KEY_AEAD"`
 }
 
 var ENV environment

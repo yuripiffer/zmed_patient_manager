@@ -3,8 +3,10 @@ module zmed_patient_manager
 go 1.18
 
 require (
+	cloud.google.com/go v0.103.0
 	github.com/Netflix/go-env v0.0.0-20220526054621-78278af1949d
 	github.com/jackc/pgx/v4 v4.16.1
+	gopkg.in/validator.v2 v2.0.1
 )
 
 require (

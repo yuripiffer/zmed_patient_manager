@@ -10,14 +10,14 @@ import (
 	"zmed_patient_manager/pkg/app_errors"
 )
 
-type gcmCrypto struct {
+type GcmCrypto struct {
 	keyCrypto []byte
 	keyGcmIV  []byte
 	keyAead   []byte
 }
 
-func NewGCM(keyCrypto string, keyGcmIV string, keyAead string) (*gcmCrypto, app_errors.AppError) {
-	crypto := new(gcmCrypto)
+func NewGCM(keyCrypto string, keyGcmIV string, keyAead string) (*GcmCrypto, app_errors.AppError) {
+	crypto := new(GcmCrypto)
 	kc, err := hex.DecodeString(keyCrypto)
 	if err != nil {
 		return crypto, app_errors.NewInternalServerError("keyCrypto", err)
@@ -36,7 +36,7 @@ func NewGCM(keyCrypto string, keyGcmIV string, keyAead string) (*gcmCrypto, app_
 	return crypto, nil
 }
 
-func (c *gcmCrypto) Encrypt(text string) (string, app_errors.AppError) {
+func (c *GcmCrypto) Encrypt(text string) (string, app_errors.AppError) {
 	_cipher, err := aes.NewCipher(c.keyCrypto)
 	if err != nil {
 		return "", app_errors.NewInternalServerError("encrypt", err)
@@ -54,7 +54,7 @@ func (c *gcmCrypto) Encrypt(text string) (string, app_errors.AppError) {
 	return c.getEncryptedCiphertextWithTag(ciphertext, gcm), nil
 }
 
-func (c *gcmCrypto) Decrypt(ciphertext string) (string, app_errors.AppError) {
+func (c *GcmCrypto) Decrypt(ciphertext string) (string, app_errors.AppError) {
 	ciphertextEncoded, tagLen, err := c.getCiphertextWithTag(ciphertext)
 	if err != nil {
 		return "", app_errors.NewInternalServerError("cipher decrypt", err)
@@ -79,7 +79,7 @@ func (c *gcmCrypto) Decrypt(ciphertext string) (string, app_errors.AppError) {
 	return string(plaintext), nil
 }
 
-func (c *gcmCrypto) getEncryptedCiphertextWithTag(ciphertext []byte, gcm cipher.AEAD) string {
+func (c *GcmCrypto) getEncryptedCiphertextWithTag(ciphertext []byte, gcm cipher.AEAD) string {
 	tagPosition := len(ciphertext) - gcm.Overhead()
 
 	tag := ciphertext[tagPosition:]
@@ -91,7 +91,7 @@ func (c *gcmCrypto) getEncryptedCiphertextWithTag(ciphertext []byte, gcm cipher.
 	return tagEncoded + "$" + ciphertextEncoded
 }
 
-func (c *gcmCrypto) getCiphertextWithTag(ciphertext string) ([]byte, int, error) {
+func (c *GcmCrypto) getCiphertextWithTag(ciphertext string) ([]byte, int, error) {
 	if !strings.Contains(ciphertext, "$") {
 		return nil, -1, errors.New("invalid ciphertext")
 	}
@@ -104,7 +104,7 @@ func (c *gcmCrypto) getCiphertextWithTag(ciphertext string) ([]byte, int, error)
 	return append(ciphertextEncoded, tagEncoded...), len(tagEncoded), nil
 }
 
-func (c *gcmCrypto) stringInSlice(value string, list []string) bool {
+func (c *GcmCrypto) stringInSlice(value string, list []string) bool {
 	for _, b := range list {
 		if b == value {
 			return true

@@ -15,7 +15,6 @@ func (s *service) validatePhone(cellphone string) bool {
 			return false
 		}
 		return true
-
 	}
 	return false
 }
